@@ -17,7 +17,7 @@ walk('.', (filePath) => {
     let content = fs.readFileSync(filePath, 'utf8');
     
     // Replace lamborghini.html with revuelto.html in footer/collection links
-    const newContent = content.replace(/href="lamborghini\.html"/g, 'href="revuelto.html"');
+    const newContent = content.replace(/href="lamborghini\.html"/g, 'href="/revuelto"');
 
     if (newContent !== content) {
         fs.writeFileSync(filePath, newContent, 'utf8');

@@ -117,7 +117,7 @@
     <!-- UI LAYER -->
     <div class="ui-overlay">
         <div class="header">
-            <a href="index.html" class="logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
+            <a href="/" class="logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
             <a href="#" id="backBtn" class="btn-back">EXIT SHOWCASE</a>
         </div>
 
@@ -168,7 +168,7 @@
                 document.getElementById('car-name').innerText = car.name;
                 document.getElementById('brand-tag').innerText = `${car.brand.toUpperCase()} AUTOMOTIVE`;
                 viewer.src = car.modelUrl;
-                document.getElementById('backBtn').href = car.brand === 'mclaren' ? 'mclaren.html' : `car.html?id=${car.id}`;
+                document.getElementById('backBtn').href = car.brand === 'mclaren' ? 'mclaren.html' : `/car?id=${car.id}`;
             }
 
             // --- LOADING LOGIC ---

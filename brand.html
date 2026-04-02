@@ -291,7 +291,7 @@
     <div class="app-container" style="display: block;">
         <!-- MAIN VIEWER: Now Full Page -->
         <section class="main-viewer" style="width: 100vw; height: 100vh; padding: 0;">
-            <a href="discover.html" class="back-circle">
+            <a href="/discover" class="back-circle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -423,11 +423,11 @@
             const discoverBtn = document.getElementById('discover-btn');
 
             function openCarPage(id) {
-                if (id === 'f80') window.location.href = "ferrari-f80.html";
-                else if (id === 'revuelto') window.location.href = "revuelto.html";
-                else if (id === 'bolide') window.location.href = "bugatti.html";
-                else if (id === '296-speciale') window.location.href = "296-speciale.html";
-                else window.location.href = `car.html?id=${id}`;
+                if (id === 'f80') window.location.href = '/ferrari-f80';
+                else if (id === 'revuelto') window.location.href = '/revuelto';
+                else if (id === 'bolide') window.location.href = '/bugatti';
+                else if (id === '296-speciale') window.location.href = '/296-speciale';
+                else window.location.href = `/car?id=${id}`;
             }
 
             function selectCar(car) {
@@ -508,7 +508,7 @@
                 else if (car.id === 'revuelto') discoverBtn.href = "revuelto.html";
                 else if (car.id === 'bolide') discoverBtn.href = "bugatti.html";
                 else if (car.id === '296-speciale') discoverBtn.href = "296-speciale.html";
-                else discoverBtn.href = `car.html?id=${car.id}`;
+                else discoverBtn.href = `/car?id=${car.id}`;
             }
 
             function populateList(category = 'All') {

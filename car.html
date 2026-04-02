@@ -391,25 +391,25 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <a href="index.html" class="footer-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
+                <a href="/" class="footer-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
                 <p class="footer-tagline">Architects of hyper-automotive destiny. We curate the world's most exclusive machinery for those who demand the zenith of performance.</p>
             </div>
             <div class="footer-col">
                 <h5>Discover</h5>
                 <ul>
-                    <li><a href="models.html">Inventory</a></li>
-                    <li><a href="discover.html">Showcase</a></li>
-                    <li><a href="configure.html">Configuration</a></li>
-                    <li><a href="about.html">Our Legacy</a></li>
+                    <li><a href="/models">Inventory</a></li>
+                    <li><a href="/discover">Showcase</a></li>
+                    <li><a href="/configure">Configuration</a></li>
+                    <li><a href="/about">Our Legacy</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h5>Collection</h5>
                 <ul>
-                    <li><a href="ferrari.html">Ferrari</a></li>
-                    <li><a href="revuelto.html">Lamborghini</a></li>
-                    <li><a href="bugatti.html">Bugatti</a></li>
-                    <li><a href="mclaren.html">McLaren</a></li>
+                    <li><a href="/ferrari">Ferrari</a></li>
+                    <li><a href="/revuelto">Lamborghini</a></li>
+                    <li><a href="/bugatti">Bugatti</a></li>
+                    <li><a href="/mclaren">McLaren</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -458,7 +458,7 @@
             const cars = window.db ? db.getCars() : [];
             const car = cars.find(c => c.id === carId);
 
-            if (!car) { window.location.href = 'index.html'; return; }
+            if (!car) { window.location.href = '/'; return; }
 
             // 1. POPULATE HERO
             document.getElementById('car-brand').innerText = car.brand.toUpperCase();
@@ -694,7 +694,7 @@
 
             // DESIGN CTA (NEW)
             document.getElementById('design-cta').onclick = () => {
-                window.location.href = `design.html?id=${car.id}`;
+                window.location.href = `/design?id=${car.id}`;
             };
         });
     </script>

@@ -847,12 +847,12 @@
 
 <!-- ===== NAVBAR ===== -->
 <nav id="navbar" class="hero-nav">
-    <a href="index.html" class="nav-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
+    <a href="/" class="nav-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
     <div class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="discover.html">Brands</a>
-        <a href="models.html">Cars</a>
+        <a href="/" class="active">Home</a>
+        <a href="/about">About</a>
+        <a href="/discover">Brands</a>
+        <a href="/models">Cars</a>
     </div>
     <div class="nav-toggle" id="navToggle">
         <span></span>
@@ -884,7 +884,7 @@
             Experience the architects of hyper-automotive destiny. We source only the apex tier.
         </p>
         <div class="hero-actions" id="hero-actions">
-            <a href="models.html" class="btn-hero">
+            <a href="/models" class="btn-hero">
                 Explore Fleet <i data-lucide="arrow-right"></i>
             </a>
             <a href="#about" class="btn-ghost">
@@ -1006,7 +1006,7 @@
             Discover our complete portfolio of elite high-performance machines, from hybrid legends to pure combustion icons.
         </p>
         <div class="reveal d4">
-            <a href="models.html" class="btn-cta">
+            <a href="/models" class="btn-cta">
                 DISCOVER MORE <i data-lucide="arrow-right"></i>
             </a>
         </div>
@@ -1017,33 +1017,33 @@
 <footer>
     <div class="footer-grid">
         <div class="footer-brand-side">
-            <a href="index.html" class="footer-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
+            <a href="/" class="footer-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
             <p class="footer-tagline">The architects of your hyper-automotive destiny. Sourcing, verifying, and curating the most exclusive high-performance machines on the planet.</p>
         </div>
         <div class="footer-col">
             <h5>Navigate</h5>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="discover.html">Brands</a></li>
-                <li><a href="models.html">Models</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/discover">Brands</a></li>
+                <li><a href="/models">Models</a></li>
             </ul>
         </div>
         <div class="footer-col">
             <h5>Collection</h5>
             <ul>
-                <li><a href="revuelto.html">Lamborghini</a></li>
-                <li><a href="bugatti.html">Bugatti</a></li>
-                <li><a href="mclaren.html">McLaren</a></li>
+                <li><a href="/revuelto">Lamborghini</a></li>
+                <li><a href="/bugatti">Bugatti</a></li>
+                <li><a href="/mclaren">McLaren</a></li>
             </ul>
         </div>
         <div class="footer-col">
             <h5>Quick Links</h5>
             <ul>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms.html">Terms of Service</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="disclaimer.html">Disclaimer</a></li>
+                <li><a href="/privacy">Privacy Policy</a></li>
+                <li><a href="/terms">Terms of Service</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/disclaimer">Disclaimer</a></li>
             </ul>
         </div>
     </div>
@@ -1177,7 +1177,7 @@ document.addEventListener('DOMContentLoaded', () => {
           image:'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=900' }
     ];
     const list = brands.length
-        ? brands.slice(0,5).map(b => ({ name:b.name, href:`brand.html?id=${b.id}`, found:b.found, country:b.country, image:b.image }))
+        ? brands.slice(0,5).map(b => ({ name:b.name, href:`/brand?id=${b.id}`, found:b.found, country:b.country, image:b.image }))
         : fallback;
 
     list.forEach(b => {
