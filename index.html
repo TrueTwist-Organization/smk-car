@@ -820,7 +820,12 @@
     @media(max-width: 768px) {
         #navbar, #navbar.scrolled { padding: 18px 28px; }
         .nav-links { display: none; }
-        .hero-content { padding: 0 28px 80px; }
+        .hero-content { padding: 0 28px 80px; text-align: center; }
+        .hero-eyebrow { justify-content: center; }
+        .hero-h1 { font-size: clamp(48px, 15vw, 72px); }
+        .hero-sub { margin-left: auto; margin-right: auto; max-width: 100%; font-size: 12px; line-height: 1.6; }
+        .hero-actions { flex-direction: column; gap: 16px; align-items: stretch; width: 100%; }
+        .btn-hero, .btn-ghost { text-align: center; justify-content: center; padding: 16px 24px; font-size: 11px; }
         .hero-stats { display: none; }
         .hero-scroll { display: none; }
         #about, #brands, .exp-text-side { padding: 80px 28px; }
