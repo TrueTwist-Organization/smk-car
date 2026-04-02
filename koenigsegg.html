@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koenigsegg Jesko | Absolute Power</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Koenigsegg CC850 | Immersive Exhibition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="footer-styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     <style>
         /* --- CORE RESET & THEME --- */
+        html, body { margin: 0; padding: 0; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --red: #FF9900;
+            --red: #00D4FF;
             --bg: #050505;
             --text-main: #f4f4f4;
             --text-dim: #999;
@@ -57,26 +59,69 @@
         }
         h1:hover, h2:hover, h3:hover, .title-huge:hover, .vertical-text:hover {
             color: #fff !important;
-            text-shadow: 0 0 20px #FF9900, 0 0 40px rgba(255,153,0,0.6);
+            text-shadow: 0 0 20px #00D4FF, 0 0 40px rgba(0,212,255,0.6);
             transform: translateY(-2px);
         }
         p:hover, span:hover, .perf-key:hover, .perf-val:hover {
             color: #fff !important;
-            text-shadow: 0 0 15px rgba(255,153,0,0.4);
+            text-shadow: 0 0 15px rgba(0,212,255,0.4);
             transform: scale(1.01);
         }
 
         /* --- HERO (VIDEO) --- */
-        .hero { height: 100vh; overflow: hidden; background: var(--bg); padding: 0; }
+        .hero { height: 100vh; overflow: hidden; background: var(--bg); padding: 0; margin-top: 0; }
         .hero-video {
-            position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
-            object-fit: cover; transform: translate(-50%, -50%); opacity: 0.8; z-index: 0;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.8; z-index: 0;
+        }
+
+        /* --- NAVIGATION --- */
+        .hero-nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 30px 80px; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.5s cubic-bezier(0.19,1,0.22,1); background: transparent;
+        }
+        .hero-nav.scrolled {
+            padding: 16px 80px; background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+            letter-spacing: 0.4em; color: #fff; text-decoration: none;
+            display: flex; align-items: center;
+        }
+        .logo span { color: var(--red); }
+        .brand-logo { height: 34px; margin-right: 14px; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.6);
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.3em; transition: 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .nav-toggle { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; }
+        .nav-toggle span { width: 28px; height: 1px; background: #fff; transition: 0.4s; }
+
+        @media (max-width: 1000px) {
+            .hero-nav { padding: 24px 40px; }
+            .nav-links { 
+                position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+                background: #000; flex-direction: column; justify-content: center;
+                align-items: center; gap: 40px; transition: 0.6s cubic-bezier(0.19,1,0.22,1);
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 24px; }
+            .nav-toggle { display: flex; }
+            .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .nav-toggle.active span:nth-child(2) { opacity: 0; }
+            .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
         }
 
         /* --- IMMERSIVE INTRO SECTION --- */
         .immersive-intro {
             background-image: linear-gradient(to right, rgba(5,5,5,0.8) 0%, rgba(5,5,5,0.6) 50%, rgba(5,5,5,0.8) 100%),
-                               url('ferrari-revuelto-proper.png');
+                               url('revuelto-intro-bg.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -93,7 +138,7 @@
         }
 
         /* --- BUTTONS --- */
-        .btn-ferrari {
+        .btn-revuelto {
             background: #fff; color: #000; padding: 18px 48px; border-radius: 50px;
             font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em;
             text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
@@ -101,10 +146,10 @@
             border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
             position: relative; overflow: hidden;
         }
-        .btn-ferrari:hover { 
+        .btn-revuelto:hover { 
             transform: translateY(-5px) scale(1.05); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
-            background: #D71920; color: #fff; 
+            box-shadow: 0 20px 40px rgba(0,212,255,0.4); 
+            background: #00D4FF; color: #fff; 
         }
 
         /* --- DATA TABLES --- */
@@ -144,15 +189,25 @@
         .split-left { flex: 1; z-index: 2; }
         .split-right { flex: 1.2; text-align: right; z-index: 1; }
         .showcase-img, .showcase-video { width: 100%; height: auto; max-height: 600px; object-fit: contain; filter: drop-shadow(0 20px 60px rgba(255,255,255,0.8)); }
-        .showcase-video.enlarged { max-height: 850px; object-fit: cover; transform: scale(1.15); transform-origin: right center; border-radius: 4px; }
+        .showcase-video.enlarged { 
+            max-height: 850px; 
+            object-fit: cover; 
+            transform-origin: center; 
+            border-radius: 4px; 
+        }
         .showcase-video.vertical { 
             width: 100%; 
             max-width: 450px; 
             aspect-ratio: 9 / 14; 
             object-fit: cover; 
             border-radius: 20px; 
-            box-shadow: 0 40px 80px rgba(255,255,255,0.9);
-            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px var(--red), 0 0 60px rgba(0,212,255,0.4), 0 40px 80px rgba(0,0,0,0.8);
+            border: 2px solid rgba(0,212,255,0.5);
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .showcase-video.vertical:hover {
+            box-shadow: 0 0 50px var(--red), 0 0 100px rgba(0,212,255,0.6), 0 40px 80px rgba(0,0,0,0.8);
+            transform: translateY(-10px) scale(1.02);
         }
         .showcase-embed { width: 100%; height: 500px; border: none; overflow: hidden; pointer-events: all; }
         
@@ -203,8 +258,32 @@
         .gallery-card:hover img, .gallery-card:hover video { transform: scale(1.05); filter: brightness(1); }
 
         /* --- ANIMATIONS --- */
-        .reveal { opacity: 0; transform: translateY(60px); filter: blur(10px); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 0; transform: translateY(60px); will-change: opacity, transform, filter; }
+        .reveal.active { opacity: 1; transform: translateY(0); filter: none; }
+
+        /* Technical Dot Icon */
+        .tech-icon-wrap { display: flex; align-items: center; margin-bottom: 25px; }
+        .tech-dot {
+            width: 32px; height: 32px; border: 1.5px solid var(--red); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; position: relative;
+            margin-right: 20px;
+        }
+        .tech-dot::after { content: ''; width: 10px; height: 10px; background: var(--red); border-radius: 50%; }
+        .tech-dot::before {
+            content: ''; position: absolute; inset: -5px; border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%; animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring { 
+            0% { transform: scale(0.8); opacity: 0.5; } 
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .modal-watermark {
+            position: absolute; top: 10%; right: -5%; font-family: 'Bebas Neue';
+            font-size: 280px; color: rgba(255,255,255,0.03); font-weight: 900;
+            letter-spacing: 0.1em; pointer-events: none; z-index: 0; line-height: 0.8;
+            transform: rotate(0deg); text-transform: uppercase;
+        }
 
         /* --- POWERTRAIN MODAL --- */
         .powertrain-modal {
@@ -219,10 +298,10 @@
         }
         .modal-content {
             position: relative; width: 100%; max-width: 800px; 
-            background: linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.8) 100%), url('ferrari-modal-bg.jpg') center/cover no-repeat;
+            background: linear-gradient(to right, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.9) 100%), url('revuelto-intro-bg.jpg') center/cover no-repeat;
             height: 100%; transform: translateX(100%); transition: 0.8s cubic-bezier(0.19,1,0.22,1);
             overflow: hidden; display: flex; flex-direction: column;
-            border-left: 1px solid rgba(215,25,32,0.3);
+            border-left: 1px solid rgba(0,212,255,0.4);
         }
         .powertrain-modal.active { pointer-events: all; }
         .powertrain-modal.active .modal-bg { opacity: 1; }
@@ -239,6 +318,32 @@
             transition: 0.3s;
         }
         .btn-close:hover { color: var(--red); transform: scale(1.1); }
+        
+        .modal-spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 40px;
+        }
+        .modal-spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-spec-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 8px;
+        }
+        .modal-spec-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
         
         /* Modal Scroll Animations */
         .mt-anim { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.19,1,0.22,1); }
@@ -374,8 +479,42 @@
         
         @media (max-width: 1000px) {
             .engine-content-left { top: 60px; left: 40px; }
-            .visualizer-container { width: 280px; height: 280px; }
-            .engine-btn { width: 100px; height: 100px; }
+        }
+
+        /* --- WIND TUNNEL EFFECT --- */
+        .wind-tunnel-overlay {
+            position: absolute; inset: 0; pointer-events: none; z-index: 1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        }
+        .wind-streams {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.05) 50%, transparent 100%);
+            background-size: 200% 100%;
+            animation: windFlow 2s linear infinite;
+        }
+        @keyframes windFlow {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .wind-particle {
+            position: absolute; height: 1px; background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+            border-radius: 2px; animation: particleMove linear infinite;
+        }
+        @keyframes particleMove {
+            0% { transform: translateX(100vw); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(-20vw); opacity: 0; }
+        }
+        .aero-grid-bg {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            perspective: 1000px;
+            transform: rotateX(60deg) translateY(-20%);
+            transform-origin: top;
         }
 
         @media (max-width: 1000px) {
@@ -401,6 +540,17 @@
         }
         .magnetic-target:hover ~ #cursor-outline { width: 80px; height: 80px; border-width: 2px; }
 
+        .global-back-btn {
+            position: fixed; top: 40px; right: 50px; z-index: 9999;
+            display: flex; align-items: center; gap: 12px;
+            color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 800;
+            letter-spacing: 0.3em; text-transform: uppercase;
+            text-decoration: none; transition: 0.4s;
+        }
+        .global-back-btn:hover { color: #fff; letter-spacing: 0.4em; }
+        .global-back-btn svg { width: 18px; height: 18px; stroke: rgba(255,255,255,0.6); transition: 0.3s; }
+        .global-back-btn:hover svg { stroke: #fff; transform: translateX(-5px); }
+
         /* HUD Overlays for Aero */
         .aero-hud {
             position: absolute; inset: 0; pointer-events: none; z-index: 10;
@@ -420,28 +570,64 @@
         }
         .aero-modal.active .hud-target { opacity: 1; animation: hudPulse 4s infinite; }
         @keyframes hudPulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.4; } }
+        /* 3D Model Theatrical Reveal */
+        model-viewer { 
+            opacity: 0; 
+            transition: opacity 1.5s cubic-bezier(0.19,1,0.22,1); 
+        }
+        model-viewer.revealed { opacity: 1; }
     </style>
 </head>
 <body>
     <div id="cursor-follower"></div>
     <div id="cursor-outline"></div>
 
+    <!-- NAVBAR -->
+    <nav id="navbar" class="hero-nav">
+        <a href="index.html" class="nav-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="discover.html">Brands</a>
+            <a href="models.html">Cars</a>
+        </div>
+        <div class="nav-toggle" id="navToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <a href="javascript:history.back()" class="global-back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        GO BACK
+    </a>
+
     <!-- 1. HERO SECTION (VIDEO BACKGROUND) -->
     <section class="section hero">
-        <video autoplay muted loop playsinline class="hero-video">
-            <source src="revuelto-hero.mp4" type="video/mp4">
+        <video autoplay muted loop playsinline class="hero-video" id="heroVideoMain" fetchpriority="high">
+            <source src="revuelto_sound_bg.mp4" type="video/mp4">
         </video>
         <div class="container" style="position:relative; z-index:10; text-align:center;">
              <div>
                 <span class="section-label" style="color:#fff;">Immersive Experience</span>
-                <h1 class="title-huge" style="color:#fff; letter-spacing: 0.1em;">CC850</h1>
+                <h1 class="title-huge" style="color:#fff; letter-spacing: 0.1em;">KOENIGSEGG CC850</h1>
+                <div style="margin-top: 30px;">
+                    <button id="heroSoundBtn" class="btn-revuelto" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 14px 34px;">
+                        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: #fff; margin-right: 10px; vertical-align: middle;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                        ENABLE ENGINE SOUND
+                    </button>
+                </div>
              </div>
         </div>
     </section>
 
     <!-- 1.5 ENGINE SOUND EXPERIENCE (VIDEO) -->
     <section class="section engine-experience" id="engine-experience" style="padding:0;">
-        <video id="engineVideo" loop playsinline src="koenigsegg-bg.mp4" style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 0;"></video>
+        <video id="engineVideo" loop playsinline src="new_engine_video.mp4" style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 0;"></video>
         <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%); z-index: 1;"></div>
         
         <div class="engine-content-left" style="z-index: 5;">
@@ -453,8 +639,8 @@
         </div>
 
         <div style="position: absolute; bottom: 60px; left: 80px; z-index: 15; display: flex; gap: 20px;">
-            <button id="playVidBtn" class="btn-ferrari" style="padding: 12px 30px; font-size: 10px;">PLAY VIDEO</button>
-            <button id="muteVidBtn" class="btn-ferrari" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 12px 30px; font-size: 10px;">UNMUTE</button>
+            <button id="playVidBtn" class="btn-revuelto" style="padding: 12px 30px; font-size: 10px;">PLAY VIDEO</button>
+            <button id="muteVidBtn" class="btn-revuelto" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 12px 30px; font-size: 10px;">UNMUTE</button>
         </div>
     </section>
 
@@ -462,26 +648,27 @@
     <section class="section immersive-intro">
         <div class="container reveal">
             <h1 class="title-huge">KOENIGSEGG<br>CC850</h1>
-            <p class="desc-main">The Koenigsegg CC850 is a conceptual next-generation hypercar envisioned as the ultimate expression of innovation and performance. Building upon decades of engineering excellence, it merges extreme power with advanced hybrid systems to deliver unparalleled driving dynamics.</p>
-            <p class="desc-main">Every element of the CC850 has been designed to enhance performance, from its lightweight architecture to its aerodynamic efficiency. It is not just a car â€” it is a vision of future mobility and Koenigseggâ€™s relentless pursuit of perfection.</p>
+            <p class="desc-main">The Koenigsegg Revuelto is a next-generation hybrid supercar and the first High Performance Electrified Vehicle developed by Koenigsegg. Representing the evolution of the iconic Koenigsegg Aventador, it combines a naturally aspirated V8 engine with advanced electric motors to achieve extraordinary levels of performance.</p>
+            <p class="desc-main">Building upon decades of engineering excellence, the Revuelto seamlessly integrates extreme power with cutting-edge hybrid technology, delivering unmatched driving dynamics and responsiveness.</p>
+            <p class="desc-main">Every element of the Revuelto has been meticulously engineered to enhance performance &mdash; from its lightweight carbon-fiber architecture to its advanced aerodynamic design. It is not just a car &mdash; it is a bold statement of Koenigsegg&rsquo;s future, where electrification meets uncompromising performance.</p>
         </div>
     </section>
 
     <!-- 3. PERFORMANCE DATA -->
-    <section class="section" style="min-height: 100vh; background: url('https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=2000') center/cover fixed; position: relative;">
+    <section class="section" style="min-height: 100vh; background: url('revuelto-intro-bg.jpg') center/cover fixed; position: relative;">
         <!-- Glassmorphism dark backdrop so the white text is readable against the background image -->
-        <div style="position: absolute; inset: 0; background: rgba(10,10,10,0.8); z-index: 0; backdrop-filter: blur(10px);"></div>
+        <div style="position: absolute; inset: 0; background: rgba(10,10,10,0.4); z-index: 0; backdrop-filter: blur(4px);"></div>
         
         <div class="container" style="position: relative; z-index: 1;">
             <span class="section-label reveal" style="text-transform: none; margin-bottom: 20px; display: block; color: #fff;">Performance (Expected)</span>
             <div class="perf-stats">
                 <div class="perf-stat-item reveal">
                     <span class="perf-key">Power Output</span>
-                    <span class="perf-val">1385 HP</span>
+                    <span class="perf-val">1015 CV</span>
                 </div>
                 <div class="perf-stat-item reveal">
-                    <span class="perf-key">0â€“100 km/h</span>
-                    <span class="perf-val">~2.0 s</span>
+                    <span class="perf-key">0&ndash;100 km/h</span>
+                    <span class="perf-val">~2.5 s</span>
                 </div>
                 <div class="perf-stat-item reveal">
                     <span class="perf-key">Top Speed</span>
@@ -489,7 +676,7 @@
                 </div>
                 <div class="perf-stat-item reveal">
                     <span class="perf-key">Powertrain</span>
-                    <span class="perf-val">5.0L V8 Twin-Turbo</span>
+                    <span class="perf-val">5.0L V8 Twin-Turbo (V8 + 3 Electric Motors)</span>
                 </div>
                 <div class="perf-stat-item reveal">
                     <span class="perf-key">Drivetrain</span>
@@ -499,32 +686,31 @@
         </div>
     </section>
 
-    <!-- 4. SECTION 1 â€” POWERTRAIN -->
-    <section class="section split-section" style="flex-direction: column; align-items: stretch; justify-content: flex-start; padding-top: 150px;">
-        <div class="container reveal">
-            <div class="split-left">
-                <span class="section-label">Powertrain</span>
-                <h2 class="vertical-text">V8<br>ON<br>PAPER,<br>THRILLS<br>IN<br>PRACTICE</h2>
-                <div style="margin-bottom: 40px;">
-                    <p style="font-weight: 800; font-size: 24px;">V8 120Â° ENGINE</p>
-                    <p style="color: var(--text-dim); font-size: 14px; letter-spacing: 0.2em;">1385 HP MAXIMUM POWER</p>
+    <!-- 4. SECTION 1 &mdash; POWERTRAIN (FULL-SCREEN RE-ENGINEERED) -->
+    <section class="section powertrain-showcase" id="powertrain-showcase" style="height: 100vh; overflow: hidden; position: relative; padding: 0; display: flex; flex-direction: column; justify-content: center;">
+        <video autoplay muted loop playsinline id="powertrainVideoScroll" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" preload="metadata">
+            <source src="new_powertrain_video.mp4" type="video/mp4">
+        </video>
+        <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.95) 100%); z-index: 1;"></div>
+        
+        <div class="container" style="position: relative; z-index: 2;">
+            <div style="max-width: 650px;">
+                <span class="section-label reveal">Powertrain</span>
+                <h2 class="vertical-text reveal">V8<br>MEETS<br>ELECTRIC<br>POWER</h2>
+                <div class="reveal" style="margin-bottom: 40px;">
+                    <p style="font-weight: 800; font-size: 24px;">V8 6.5L ENGINE<br>WITH HYBRID SYSTEM</p>
+                    <p style="color: var(--text-dim); font-size: 14px; letter-spacing: 0.2em;">1015 CV MAXIMUM POWER</p>
                 </div>
-                <a href="#" class="btn-ferrari" onclick="openPowertrain(event)">Discover the powertrain</a>
-            </div>
-            <div class="split-right">
-                <video autoplay muted loop playsinline class="showcase-video enlarged">
-                    <source src="revuelto-powertrain.mp4" type="video/mp4">
-                </video>
+                <a href="#" class="btn-revuelto reveal" onclick="openPowertrain(event)">Discover the powertrain</a>
             </div>
         </div>
-        
-        <!-- Powertrain Stats Grid -->
-        <div class="container">
-            <div class="stat-grid">
+
+        <div class="container" style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 5; width: 100%;">
+            <div class="stat-grid" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; margin-top: 0;">
                 <div class="stat-item reveal"><span class="stat-val">V8</span><span class="stat-label">Powertrain</span></div>
                 <div class="stat-item reveal"><span class="stat-val">5.75 s</span><span class="stat-label">0-200 KM/H</span></div>
                 <div class="stat-item reveal"><span class="stat-val">155 cv/l</span><span class="stat-label">Specific power output</span></div>
-                <div class="stat-item reveal"><span class="stat-val">1200</span><span class="stat-label">Horsepower</span></div>
+                <div class="stat-item reveal"><span class="stat-val">1015</span><span class="stat-label">Horsepower</span></div>
             </div>
         </div>
     </section>
@@ -536,11 +722,11 @@
                 <span class="section-label">CHASSIS AND BODY</span>
                 <h2 class="vertical-text">A<br>GENUINE<br>PERFORMANCE<br>ARCHITECTURE</h2>
                 <p class="desc-main">The Koenigsegg CC850 features an ultra-lightweight carbon fibre chassis engineered to maximise rigidity and reduce weight. This advanced structure ensures optimal balance, precision, and driving control even at extreme speeds.</p>
-                <a href="#" class="btn-ferrari" onclick="openAero(event)">Discover more</a>
+                <a href="#" class="btn-revuelto" onclick="openAero(event)">Discover more</a>
             </div>
             <div class="split-left">
-                <video autoplay muted loop playsinline class="showcase-video vertical">
-                    <source src="revuelto-chassis.mp4" type="video/mp4">
+                <video autoplay muted loop playsinline class="showcase-video vertical" src="revuelto-chassis-video.mp4" style="border-radius: 20px; width: 100%; height: 100%; object-fit: cover;">
+                    <source src="revuelto-chassis-video.mp4" type="video/mp4">
                 </video>
             </div>
         </div>
@@ -551,12 +737,22 @@
         <div class="container reveal">
             <div class="split-left">
                 <span class="section-label">Design</span>
-                <h2 class="vertical-text">KOENIGSEGG<br>CC850<br><br>ENGINEERED<br>FOR<br>THE<br>FUTURE</h2>
-                <p class="desc-main">Every curve of the Koenigsegg CC850 is sculpted for performance. Its aggressive stance and aerodynamic profile are not only visually striking but also functionally essential for high-speed stability.</p>
-                <a href="revuelto-viewer.html" class="btn-ferrari">Discover the design</a>
+                <h2 class="vertical-text">KOENIGSEGG<br>CC850<br>ENGINEERED<br>FOR<br>THE<br>FUTURE</h2>
+                <p class="desc-main">Every curve of the Koenigsegg Revuelto is engineered to enhance performance. Its aggressive stance and advanced aerodynamic design are not only visually striking but also essential for delivering stability, efficiency, and control at extreme speeds.</p>
+                <a href="revuelto-design-explorer.html" class="btn-revuelto">DISCOVER MORE</a>
             </div>
             <div class="split-right">
-                <iframe src="revuelto-viewer.html?mini=true" class="showcase-embed" scrolling="no"></iframe>
+                <div style="width: 100%; height: 500px; position: relative; border-radius: 20px; overflow: hidden; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.05);">
+                    <video 
+                        id="lambo-video-preview"
+                        src="lombo_123.mp4"
+                        autoplay 
+                        muted 
+                        loop 
+                        playsinline 
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                    </video>
+                </div>
             </div>
         </div>
     </section>
@@ -579,7 +775,7 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <a href="index.html" class="footer-logo logo"><img src="public/logo.png" class="brand-logo" alt="Logo">SMK <span>C</span>AR</a>
-                <p class="footer-tagline">Architects of hyper-automotive destiny. We curate the world’s most exclusive machinery for those who demand the zenith of performance.</p>
+                <p class="footer-tagline">Architects of hyper-automotive destiny. We curate the world's most exclusive machinery for those who demand the zenith of performance.</p>
             </div>
             <div class="footer-col">
                 <h5>Discover</h5>
@@ -594,7 +790,7 @@
                 <h5>Collection</h5>
                 <ul>
                     <li><a href="ferrari.html">Ferrari</a></li>
-                    <li><a href="revuelto.html">Lamborghini</a></li>
+                    <li><a href="revuelto.html">Koenigsegg</a></li>
                     <li><a href="bugatti.html">Bugatti</a></li>
                     <li><a href="mclaren.html">McLaren</a></li>
                 </ul>
@@ -623,16 +819,25 @@
     <div class="powertrain-modal" id="powertrainModal">
         <div class="modal-bg" onclick="closePowertrain()"></div>
         <div class="modal-content">
-            <button class="btn-close" onclick="closePowertrain()">âœ– CLOSE</button>
-            <div class="modal-scroll">
-                <span class="section-label mt-anim" style="color: var(--red);">Share / Tech</span>
-                <h2 class="title-huge mt-anim" style="font-size: clamp(40px, 6vw, 60px); margin-bottom: 40px; line-height: 1;">POWERTRAIN</h2>
-                <div class="mt-anim" style="max-width: 600px; text-align: left; padding-bottom: 60px;">
-                    <p class="desc-main" style="color: #999; font-size: 16px;">The carry-over from racing also includes technology from Formula 1, from which the concepts of the MGU-K and the MGU-H (with a bespoke e-turbo application) have been borrowed. It was also decided to tilt the engine-transmission unit down by 1.3Â° in the Z axis, to lower the centre of gravity without compromising the efficacy of the aerodynamic underfloor. This lowered installation position was permitted by the new smaller diameter flywheel.</p>
-                    <p class="desc-main" style="color: #999; font-size: 16px;">The powertrain also uses the first electric motor (MGU-K) developed, tested and manufactured entirely by Koenigsegg at Ängelholm. The design of this motor, and the tooth-coil stator, Halbach array rotor configuration and magnet retention system in carbon fibre in particular, draws from Koenigseggâ€™s experience in motorsports. A DC/DC converter transforms DC current at one voltage to DC current at a different voltage. This single component handles three different voltages simultaneously: 800 V, 48 V and 12 V.</p>
-                    <p class="desc-main" style="color: #999; font-size: 16px;">Also developed and manufactured entirely in-house by Koenigsegg, the front axle includes two electric motors, an inverter and an integrated cooling system. This component makes it possible to use torque vectoring for the front axle. Integrating different functions in a single component and the new mechanical layout have offered a weight saving of around 14 kg over previous applications. Optimising mechanical efficiency was a primary goal: low viscosity oil and a dry sump active lubrication system with an oil tank integrated directly into the axle reduced mechanical power losses by 20%. The use of high coverage ratio gears contributed to reducing noise emissions by 10 dB.</p>
-                    <p class="desc-main" style="color: #999; font-size: 16px;">The inverter integrated in the front axle also transforms alternating current produced by the axle under regenerative braking into direct current for recharging the battery. Another inverter is used for the rear electric motor (MGU-K), which performs three functions: starting the internal combustion engine, recovering energy to recharge the high voltage battery and supplementing the torque of the engine in certain dynamic conditions. Integrated into both of these inverters is the Koenigsegg Power Pack (FPP) system, a power module with all the elements necessary for power conversion combined in the most compact unit possible.</p>
-                    <p class="desc-main" style="color: #999; font-size: 16px;">The high-voltage battery is conceived for very high power density. Its innovative design is based on three principles: lithium-cell chemistry derived from Formula 1, an extensive use of carbon fibre for the construction of the monocoque casing, and a patented design and assembly method (cell-to-pack) which minimises the weight and volume of the unit. Situated low down in the engine bay, the pack contributes to even better dynamic vehicle behaviour by lowering the centre of gravity of the CC850. The pack is configured with 204 cells connected in series and subdivided equally into 3 modules, for a total energy capacity of 2.3 kWh and a maximum power output of 242 kW.</p>
+            <button class="btn-close" onclick="closePowertrain()">✖ CLOSE</button>
+            <div class="modal-scroll" data-lenis-prevent>
+                <div class="modal-watermark">LAMBO</div>
+                
+                <div class="tech-icon-wrap mt-anim">
+                    <div class="tech-dot"></div>
+                    <span class="section-label" style="color: var(--red); margin-bottom: 0;">POWERTRAIN</span>
+                </div>
+                
+                <h2 class="title-huge mt-anim" style="font-size: clamp(40px, 6vw, 65px); margin-bottom: 45px; line-height: 1;">V8 ENGINE +<br>HYBRID</h2>
+                
+                <div class="mt-anim" style="max-width: 650px; text-align: left; padding-bottom: 60px; position: relative; z-index: 1;">
+                    <p class="desc-main" style="color: var(--red); font-weight: 700; font-size: 19px; margin-bottom: 30px; letter-spacing: 0.02em;">A NEW PARADIGM OF PERFORMANCE</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">At the heart of the Revuelto lies a naturally aspirated 6.5-liter V8 engine, seamlessly integrated with an advanced high-performance hybrid system. This revolutionary architecture delivers a combined output of 1015 CV, marking a new benchmark in the history of Koenigsegg.</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">Engineered for extreme performance, the V8 has been optimized for higher rotational speeds, improved combustion efficiency, and instantaneous response. Complementing it are three electric motors — two positioned on the front axle and one integrated within the transmission — working in perfect harmony to enhance power delivery, enable torque vectoring, and provide immediate acceleration.</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">A groundbreaking innovation is the introduction of the new 8-speed dual-clutch transmission, mounted transversely behind the engine — a first for a Koenigsegg V8. This compact configuration optimizes space utilization, allowing for efficient integration of the lithium-ion battery while achieving ideal weight distribution and a lower center of gravity.</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">The thermal management system has been completely re-engineered to support both the high-revving V8 engine and the electrified components. A sophisticated dual-circuit cooling system ensures consistent temperature control, even under the most demanding track conditions, maintaining optimal performance at all times.</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; margin-bottom: 25px; line-height: 1.7;">As a result, the Revuelto’s powertrain delivers sustained peak performance without compromise. This level of engineering precision defines Koenigsegg’s vision of a High Performance Electrified Vehicle (HPEV), where electrification enhances — rather than replaces — the raw emotion of a naturally aspirated V8.</p>
+                    <p class="desc-main" style="color: #add8e6; font-size: 16px; line-height: 1.7;">The Koenigsegg Revuelto is not merely powered by innovation — it is driven by a masterpiece of engineering, redefining the limits of hybrid performance, design, and driving exhilaration.</p>
                 </div>
             </div>
         </div>
@@ -642,19 +847,43 @@
     <div class="aero-modal" id="aeroModal">
         <div class="aero-left">
             <div id="aeroCanvasContainer">
+                <!-- 3D MODEL VIEWER -->
+                <model-viewer id="aero-simulation-model"
+                    src="2023_koenigsegg_cc850.glb"
+                    camera-controls
+                    disable-zoom
+                    interaction-prompt="none"
+                    exposure="1.5"
+                    environment-image="neutral"
+                    shadow-intensity="2"
+                    camera-orbit="45deg 75deg 5m"
+                    loading="lazy"
+                    reveal="manual"
+                    style="width: 100%; height: 100%; position: absolute; z-index: 2; background: transparent;">
+                </model-viewer>
+
+                <!-- WIND PARTICLES OVERLAY -->
+                <div class="wind-tunnel-overlay" id="windOverlay">
+                    <div class="wind-streams"></div>
+                </div>
+
+                <!-- GRID BACKGROUND -->
+                <div class="aero-grid-bg"></div>
+
                 <div class="aero-hud">
                     <div class="hud-top-left">
                         <div class="hud-line"></div>
-                        <div>System Status: Nominal</div>
-                        <div style="color: var(--red);">Flow Velocity: 350 KM/H</div>
+                        <div>SYSTEM STATUS: NOMINAL</div>
+                        <div style="color: var(--red); font-weight: 900;">FLOW VELOCITY: 350 KM/H</div>
                     </div>
                     <div class="hud-top-right">
-                        <div>Grid Sector: 7G</div>
-                        <div>Lat: 44.5323Â° N</div>
+                        <div>GRID SECTOR: 7G</div>
+                        <div>LAT: 44.5323° N</div>
                     </div>
                     <div class="hud-bottom-left">
-                        <div style="font-size: 14px; font-weight: 800; color: #fff;">Tunnel Mode: Active</div>
-                        <div>Tracking Koenigsegg CC850_Proto_01</div>
+                        <div style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.1em;">TUNNEL MODE: ACTIVE</div>
+                        <div>TRACKING KOENIGSEGG CC850_PROTO_01</div>
+                        <div style="font-size: 9px; color: rgba(255,255,255,0.3); margin-top: 5px;">AERO VISUALIZATION ACTIVE • DRAGGABLE SIMULATION</div>
                     </div>
                     <div class="hud-target"></div>
                 </div>
@@ -805,6 +1034,7 @@
             const modal = document.getElementById('powertrainModal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            if (typeof lenis !== 'undefined') lenis.stop();
             
             // Re-trigger modal animations
             gsap.fromTo("#powertrainModal .mt-anim", 
@@ -816,6 +1046,7 @@
         function closePowertrain() {
             document.getElementById('powertrainModal').classList.remove('active');
             document.body.style.overflow = 'auto';
+            if (typeof lenis !== 'undefined') lenis.start();
         }
 
         // Text Scramble Effect
@@ -899,35 +1130,33 @@
         }
 
         // Aero Modal Logic
-        let aeroSimInstance = null;
         function openAero(e) {
             e.preventDefault();
             document.getElementById('aeroModal').classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Initialize 3D Simulation
-            if (!aeroSimInstance) {
-                import('./aero-simulation.js').then(module => {
-                    aeroSimInstance = new window.AeroSimulation('aeroCanvasContainer');
-                });
-            } else {
-                aeroSimInstance.focusFeature(0); // Reset to overview
+            // Generate Wind Particles
+            const container = document.getElementById('windOverlay');
+            if (container.children.length <= 1) { // Only if not already generated
+                for (let i = 0; i < 40; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'wind-particle';
+                    const top = Math.random() * 100;
+                    const duration = 0.5 + Math.random() * 1.5;
+                    const width = 50 + Math.random() * 200;
+                    const delay = Math.random() * 2;
+                    p.style.cssText = `top: ${top}%; width: ${width}px; animation-duration: ${duration}s; animation-delay: ${delay}s;`;
+                    container.appendChild(p);
+                }
             }
             
-            // Technical HUD Animation
+            // HUD Animation
             gsap.fromTo(".aero-hud > *", 
                 { opacity: 0, x: -20 },
                 { opacity: 1, x: 0, stagger: 0.1, duration: 1, ease: "expo.out", delay: 0.8 }
             );
 
-            // Text Scramble for labels
-            const labels = document.querySelectorAll('#aeroModal .aero-head, #aeroModal .title-huge');
-            labels.forEach(label => {
-                const fx = new TextScramble(label);
-                fx.setText(label.innerText);
-            });
-
-            // Re-trigger aero feature reveals
+            // Stagger Features
             gsap.fromTo("#aeroModal .aero-feature", 
                 { y: 30, opacity: 0 },
                 { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "expo.out", delay: 0.5 }
@@ -940,15 +1169,46 @@
         }
 
         function focusAero(index, el) {
-            // Update active state in UI
             document.querySelectorAll('.aero-feature').forEach(f => f.classList.remove('active'));
             el.classList.add('active');
 
-            // Trigger 3D Camera Focus
-            if (aeroSimInstance) {
-                aeroSimInstance.focusFeature(index);
+            const model = document.getElementById('aero-simulation-model');
+            const cameraPresets = [
+                "45deg 75deg 5m",   // 0: Overview
+                "180deg 85deg 3m",  // 1: Rear/Cooling
+                "0deg 90deg 2.5m",  // 2: Front/S-Duct
+                "90deg 110deg 3m",  // 3: Underbody
+                "150deg 70deg 3.5m" // 4: Active Wing
+            ];
+
+            if (model && cameraPresets[index]) {
+                model.setAttribute('camera-orbit', cameraPresets[index]);
             }
         }
+
+        /* --- VIDEO & MODEL INTERSECTION OBSERVER --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoObs = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.play();
+                    else entry.target.pause();
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('video').forEach(v => {
+                if (v.id !== 'heroVideoMain') videoObs.observe(v);
+            });
+
+            const modelObs = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.dismissPoster();
+                        modelObs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('model-viewer').forEach(m => modelObs.observe(m));
+        });
 
         /* --- ENGINE VIDEO SYSTEM --- */
         const videoEl = document.getElementById('engineVideo');
@@ -994,11 +1254,37 @@
         // --- SMK CAR BESPOKE SCROLL ENGINE (Testarossa Aesthetic) --- //
         
         // 1. Initialize Smooth Scrolling (Lenis)
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true
+        // Navigation & Scroll Effects
+    const nav = document.getElementById('navbar');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
         });
+    }
+
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    const lenis = new Lenis({ 
+        duration: 1.2, 
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+    });
         function raf(time) {
             lenis.raf(time);
             requestAnimationFrame(raf);
@@ -1014,6 +1300,20 @@
             lenis.raf(time * 1000);
         });
         gsap.ticker.lagSmoothing(0);
+        
+        // Powertrain Scroll Zoom
+        gsap.to("#powertrainVideoScroll", {
+            scale: 1.4,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#powertrain-showcase",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // 3D Model Scroll Zoom (Design Preview) - REMOVED since model is now a video
 
         // 3. FERRARI TESTAROSSA STYLE SCROLL & TEXT ANIMATIONS
         
@@ -1069,16 +1369,17 @@
         });
 
         // c. Image and Video Elegant Scale Reveals (No Blur)
-        const visuals = document.querySelectorAll('.showcase-img, .showcase-video, .gallery-img-wrapper, .hero-video');
+        const visuals = document.querySelectorAll('.showcase-img, .showcase-video, .gallery-img-wrapper, .hero-video, #lambo-video-preview');
         visuals.forEach(visual => {
             gsap.fromTo(visual, 
-                { scale: 1.15, opacity: 0, clipPath: "polygon(0% 20%, 100% 20%, 100% 80%, 0% 80%)" },
+                { scale: 1.15, opacity: 0, clipPath: "polygon(0% 20%, 100% 20%, 100% 80%, 0% 80%)", rotateX: 10 },
                 {
                     scale: 1,
                     opacity: 1,
+                    rotateX: 0,
                     clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
                     duration: 2,
-                    ease: "power3.out",
+                    ease: "power4.out",
                     scrollTrigger: {
                         trigger: visual,
                         start: "top 95%",
@@ -1088,29 +1389,73 @@
             );
         });
 
-        // d. Hero Initial Load Animation
+        // d. Counter Animation for stats
+        const counterStats = document.querySelectorAll('.perf-val, .stat-val');
+        counterStats.forEach(stat => {
+            const originalVal = stat.innerText;
+            const match = originalVal.match(/(\d+\.?\d*)/);
+            if (match) {
+                const targetNum = parseFloat(match[1]);
+                const unit = originalVal.replace(match[1], '');
+                
+                const countProxy = { value: 0 };
+                gsap.to(countProxy, {
+                    value: targetNum,
+                    scrollTrigger: {
+                        trigger: stat,
+                        start: "top 95%",
+                        toggleActions: "play none none reverse"
+                    },
+                    onUpdate: () => {
+                        const formatted = countProxy.value.toFixed(match[1].includes('.') ? 1 : 0);
+                        stat.innerText = formatted + unit;
+                    },
+                    duration: 2.5,
+                    ease: "power2.out"
+                });
+            }
+        });
+
+        // e. Smooth Parallax for all section backgrounds
+        gsap.utils.toArray('section').forEach(section => {
+            const bg = section.querySelector('video, img');
+            if (bg) {
+                gsap.to(bg, {
+                    yPercent: 15,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            }
+        });
+
+        // f. Hero Initial Load Animation
         gsap.fromTo(".hero .container > div", 
             { y: 60, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.2, duration: 1.5, ease: "power3.out", delay: 0.5 }
+            { y: 0, opacity: 1, stagger: 0.2, duration: 2, ease: "expo.out", delay: 0.5 }
         );
         
         // e. Line animations for Performance Data section dividers
-        const statGrids = document.querySelectorAll('.stat-grid');
-        statGrids.forEach(grid => {
-            gsap.fromTo(grid, 
-                { borderColor: "rgba(255,255,255,0)" },
-                {
-                    borderColor: "rgba(255,255,255,0.1)",
-                    duration: 1.5,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: grid,
-                        start: "top 90%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
+        // g. Hero Sound Controller
+        const heroVid = document.getElementById('heroVideoMain');
+        const soundBtn = document.getElementById('heroSoundBtn');
+        if (soundBtn && heroVid) {
+            soundBtn.addEventListener('click', () => {
+                heroVid.muted = !heroVid.muted;
+                soundBtn.innerHTML = heroVid.muted 
+                    ? '<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: #fff; margin-right: 10px; vertical-align: middle;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> ENABLE ENGINE SOUND'
+                    : '<svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: #fff; margin-right: 10px; vertical-align: middle;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg> MUTE ENGINE ROAR';
+            });
+        }
+
+        // Theatrical 6-second reveal for 3D Models
+        setTimeout(() => {
+            document.querySelectorAll('model-viewer').forEach(mv => mv.classList.add('revealed'));
+        }, 6000);
     </script>
 </body>
 </html>
